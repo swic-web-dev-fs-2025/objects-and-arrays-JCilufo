@@ -16,10 +16,6 @@ const student = {
 // OBJECT DESTRUCTURING
 console.info("\n--- Object Destructuring ---");
 
-// Old way
-const name = student.name;
-const age = student.age;
-
 // Destructuring way
 const { name: studentName, age: studentAge, major } = student;
 console.info("Student info:", studentName, studentAge, major);
