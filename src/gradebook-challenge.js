@@ -27,28 +27,19 @@ const gradeBook = {
 
 // TODO: Calculate student's percentage in a course
 const getStudentPercentage = (courseId, studentId) => {
+  const { totalPoints, totalMaxPoints } = gradeBook.courses
+    .find(({ id }) => id === courseId)
+    .students.find(({ id }) => id === studentId)
+    ?.assignments.reduce(
+      (totalPointsAccumulator, { points, maxPoints }) => ({
+        totalPoints: totalPointsAccumulator.totalPoints + points,
+        totalMaxPoints: totalPointsAccumulator.totalMaxPoints + maxPoints,
+    }), 
+    { totalPoints: 0, totalMaxPoints: 0 }
+    ) || { totalPoints: 0, totalMaxPoints: 0 };
 
-  // 1. Find the course by courseId
-  const foundCourse = gradeBook.courses.find(
-    ({id}) => id === courseId);
-
-  // 2. Find the student by studentID (in that course)
-  const foundStudent = foundCourse?.students.find(
-    ({id}) => id === studentId);
-
-  // 3. Calculate the percentage: (total points earned / total max points) * 100
-const totalPointsEarned = foundStudent?.assignments.reduce(
-  (totalPoints, currentAssignment) => totalPoints + currentAssignment.points,
-  0 // Initial value for 'totalPoints'
-);
-
-const totalMaxPoints = foundStudent?.assignments.reduce(
-  (totalMax, currentAssignment) => totalMax + currentAssignment.maxPoints,
-  0 // Initial value for 'totalMax'
-);
-
-  // 4. Return the percentage
-  // 5. Handle cases where course or student is not found
+return Math.round((totalPoints / totalMaxPoints) * 100);
+};
 
 // TODO: Get class average for a course
 const getClassAverage = (courseId) => {
