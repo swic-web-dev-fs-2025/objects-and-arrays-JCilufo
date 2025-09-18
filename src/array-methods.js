@@ -47,7 +47,7 @@ const topPerformers = course.students.filter((student) => {
 });
 console.info(
   "Top performers:",
-  topPerformers.map((stu) => stu.name)
+  topPerformers.map((student) => student.name)
 );
 
 // 3. FIND - Get the first element that matches a condition
