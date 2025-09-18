@@ -35,7 +35,18 @@ const getStudentPercentage = (courseId, studentId) => {
   // 2. Find the student by studentID (in that course)
   const foundStudent = foundCourse?.students.find(
     ({id}) => id === studentId);
+
   // 3. Calculate the percentage: (total points earned / total max points) * 100
+const totalPointsEarned = foundStudent?.assignments.reduce(
+  (totalPoints, currentAssignment) => totalPoints + currentAssignment.points,
+  0 // Initial value for 'totalPoints'
+);
+
+const totalMaxPoints = foundStudent?.assignments.reduce(
+  (totalMax, currentAssignment) => totalMax + currentAssignment.maxPoints,
+  0 // Initial value for 'totalMax'
+);
+
   // 4. Return the percentage
   // 5. Handle cases where course or student is not found
 
