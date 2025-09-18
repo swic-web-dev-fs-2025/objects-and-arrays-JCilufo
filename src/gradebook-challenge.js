@@ -29,7 +29,8 @@ const gradeBook = {
 const getStudentPercentage = (courseId, studentId) => {
 
   // 1. Find the course by courseId
-  const foundCourse = gradeBook.courses.find(course => course.id === courseId);
+  const foundCourse = gradeBook.courses.find(
+    ({id}) => id === courseId);
 
   // 2. Find the student by studentID (in that course)
   // 3. Calculate the percentage: (total points earned / total max points) * 100
