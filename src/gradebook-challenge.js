@@ -25,7 +25,6 @@ const gradeBook = {
   ],
 };
 
-// TODO: Calculate student's percentage in a course
 const getStudentPercentage = (courseId, studentId) => {
   const { totalPoints, totalMaxPoints } = gradeBook.courses
     .find(({ id }) => id === courseId)
@@ -34,88 +33,70 @@ const getStudentPercentage = (courseId, studentId) => {
       (totalPointsAccumulator, { points, maxPoints }) => ({
         totalPoints: totalPointsAccumulator.totalPoints + points,
         totalMaxPoints: totalPointsAccumulator.totalMaxPoints + maxPoints,
-    }), 
-    { totalPoints: 0, totalMaxPoints: 0 }
+      }),
+      { totalPoints: 0, totalMaxPoints: 0 }
     ) || { totalPoints: 0, totalMaxPoints: 0 };
 
-return Math.round((totalPoints / totalMaxPoints) * 100);
+  return Math.round((totalPoints / totalMaxPoints) * 100);
 };
 
-// TODO: Get class average for a course
 const getClassAverage = (courseId) => {
-// Your implementation here
-// Should return average percentage for all students
+  const foundCourse = gradeBook.courses.find(({ id }) => id === courseId);
+  const totalStudents = foundCourse.students.length;
 
-// Using the .find() method to locate the course using courseId.
-const course = this.courses.find((courseItem) => courseItem.id === courseId);
-
-// Defensive programming to handle cases where course is not found.
-if (!course) return null;
-
-// Defensive programming to handle cases where there are no students.
-if (!course.students || course.students.length === 0) return 0;
-
-// Calculate each student's percentage and accumulate.
-const totalPercentages = course.students.reduce((sum, student) => {
-  const studentPercentage = this.getStudentPercentage(courseId, student.id);
-  // Only add actual numbers. If studentPercentage is null or NaN, add 0 instead.
-  return (
-    sum +
-    (typeof studentPercentage === "number" && !isNaN(studentPercentage)
-      ? studentPercentage
-      : 0)
+  return Math.round(
+    foundCourse.students
+      .map(({ id }) => getStudentPercentage(courseId, id))
+      ?.reduce((acc, percentage) => acc + percentage, 0) / totalStudents
   );
-}, 0);
-
-// Return average percentage for the class.
-return totalPercentages / course.students.length;
+};
 
 // TODO: Add new assignment to all students (immutably!)
 const addAssignment = ({ courseId, assignmentName, maxPoints }) => {
-// Your implementation here
-// Should return new gradebook object with assignment added
+  // Your implementation here
+  // Should return new gradebook object with assignment added
 
-const newAssignment = {
-  name: assignmentName,
-  points: 45,
-  maxPoints: maxPoints,
-};
+  const newAssignment = {
+    name: assignmentName,
+    points: 45,
+    maxPoints: maxPoints,
+  };
 
-// Using .map() to create a new array of courses.
-const updatedCourses = this.courses.map((course) => {
-  if (course.id === courseId) {
-    // Update students with the new assignment.
-    const updatedStudents = course.students.map((student) => ({
-      ...student,
-      assignments: [...student.assignments, newAssignment],
-    }));
-    // Return the updated course with new students array.
-    return {
-      ...course,
-      students: updatedStudents,
-    };
-  }
-  // If not the target course, return as is.
-  return course;
-});
+  // Using .map() to create a new array of courses.
+  const updatedCourses = this.courses.map((course) => {
+    if (course.id === courseId) {
+      // Update students with the new assignment.
+      const updatedStudents = course.students.map((student) => ({
+        ...student,
+        assignments: [...student.assignments, newAssignment],
+      }));
+      // Return the updated course with new students array.
+      return {
+        ...course,
+        students: updatedStudents,
+      };
+    }
+    // If not the target course, return as is.
+    return course;
+  });
 
-// Return a new gradeBook object with updated courses.
-return {
-  ...this,
-  courses: updatedCourses,
-};
+  // Return a new gradeBook object with updated courses.
+  return {
+    ...this,
+    courses: updatedCourses,
+  };
 };
 
 // Test your implementations
-const mariaPercentage = gradeBook.getStudentPercentage("CS277", 1);
+const mariaPercentage = getStudentPercentage("CS277", 1);
 console.info("Maria's percentage:", mariaPercentage, "%");
 
 // Test class average
-const classAverage = gradeBook.getClassAverage("CS277");
+const classAverage = getClassAverage("CS277");
 console.info("Class average:", classAverage, "%");
 
 // Test adding assignment
-const updatedGradeBook = gradeBook.addAssignment({
+const updatedGradeBook = addAssignment({
   courseId: "CS277",
   assignmentName: "Homework 1",
   maxPoints: 50,
