@@ -51,39 +51,42 @@ const getClassAverage = (courseId) => {
   );
 };
 
-// TODO: Add new assignment to all students (immutably!)
 const addAssignment = ({ courseId, assignmentName, maxPoints }) => {
-  // Your implementation here
-  // Should return new gradebook object with assignment added
+  const updatedCourses = gradeBook.courses.map(({ id, students }) => ({
+    id,
+    students:
+      id === courseId
+        ? students.map((student) => ({
+            ...student,
+            assignments: [
+              ...student.assignments,
+              { name: assignmentName, points: 45, maxPoints },
+            ],
+          }))
+        : students,
+  }));
 
-  const newAssignment = {
-    name: assignmentName,
-    points: 45,
-    maxPoints: maxPoints,
-  };
-
-  // Using .map() to create a new array of courses.
-  const updatedCourses = this.courses.map((course) => {
-    if (course.id === courseId) {
-      // Update students with the new assignment.
-      const updatedStudents = course.students.map((student) => ({
-        ...student,
-        assignments: [...student.assignments, newAssignment],
-      }));
-      // Return the updated course with new students array.
-      return {
-        ...course,
-        students: updatedStudents,
-      };
-    }
-    // If not the target course, return as is.
-    return course;
-  });
-
-  // Return a new gradeBook object with updated courses.
   return {
-    ...this,
+    ...gradeBook,
     courses: updatedCourses,
+  };
+};
+
+const removeStudent = (courseId, studentId) => {
+  const updatedRoster = gradeBook.courses.map(
+    ({ id, students, ...course }) => ({
+      ...course,
+      id,
+      students:
+        id === courseId
+          ? students.filter((student) => student.id !== studentId)
+          : students,
+    })
+  );
+
+  return {
+    ...gradeBook,
+    courses: updatedRoster,
   };
 };
 
@@ -102,3 +105,10 @@ const updatedGradeBook = addAssignment({
   maxPoints: 50,
 });
 console.info("Updated gradebook:", JSON.stringify(updatedGradeBook, null, 2));
+
+// Test removing student
+const updatedStudentList = removeStudent("CS277", 2);
+console.info(
+  "Updated student roster:",
+  JSON.stringify(updatedStudentList, null, 2)
+);
