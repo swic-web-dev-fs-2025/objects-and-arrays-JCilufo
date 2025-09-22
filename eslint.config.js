@@ -50,6 +50,7 @@ export default [
       "prefer-template": "error",
       eqeqeq: ["error", "always"],
       "dot-notation": "error",
+      "object-shorthand": "error",
 
       // Single Responsibility
       "max-classes-per-file": ["error", 1],
