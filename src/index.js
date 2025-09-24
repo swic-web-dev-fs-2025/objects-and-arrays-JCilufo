@@ -1,64 +1,23 @@
-const courses = [
-  {
-    id: "CS277",
-    name: "Web Development",
-    students: [
-      {
-        id: 1,
-        name: "Maria",
-        assignments: [
-          { name: "Project 1", points: 85, maxPoints: 100 },
-          { name: "Quiz 1", points: 18, maxPoints: 20 },
-        ],
-      },
-      {
-        id: 2,
-        name: "John",
-        assignments: [
-          { name: "Project 1", points: 92, maxPoints: 100 },
-          { name: "Quiz 1", points: 19, maxPoints: 20 },
-        ],
-      },
-    ],
-  },
-];
+import COURSES from "./data.js";
+import {
+  getStudentPercentage,
+  getClassAverage,
+  addAssignment,
+} from "./utils.js";
 
-const getStudentPercentage = (courseId, studentId) => {
-  const { totalPoints, totalMaxPoints } = gradeBook.courses
-    .find(({ id }) => id === courseId)
-    .students.find(({ id }) => id === studentId)
-    ?.assignments.reduce(
-      (totalPointsAccumulator, { points, maxPoints }) => ({
-        totalPoints: totalPointsAccumulator.totalPoints + points,
-        totalMaxPoints: totalPointsAccumulator.totalMaxPoints + maxPoints,
-      }),
-      { totalPoints: 0, totalMaxPoints: 0 }
-    ) || { totalPoints: 0, totalMaxPoints: 0 };
+const mariaPercentage = getStudentPercentage("CS277", 1);
+console.info("Maria's percentage:", mariaPercentage, "%");
 
-  return Math.round((totalPoints / totalMaxPoints) * 100);
-};
+const johnPercentage = getStudentPercentage("CS277", 2);
+console.info("John's percentage:", johnPercentage, "%");
 
-const getClassAverage = (courseId) => {
-  const foundCourse = gradeBook.courses.find(({ id }) => id === courseId);
-  const totalStudents = foundCourse.students.length;
+const classAverage = getClassAverage("CS277");
+console.info("Class average:", classAverage, "%");
 
-  return Math.round(
-    foundCourse.students
-      .map(({ id }) => getStudentPercentage(courseId, id))
-      ?.reduce((acc, percentage) => acc + percentage, 0) / totalStudents
-  );
-};
-
-const addAssignment = ({ courseId, assignmentName, maxPoints }) => {
-  const clonedGradeBook = structuredClone(gradeBook);
-
-  const foundCourse = clonedGradeBook.courses.find(({ id }) => id === courseId);
-  const newAssignment = { name: assignmentName, points: null, maxPoints };
-
-  foundCourse.students = foundCourse.students.map((student) => ({
-    ...student,
-    assignments: [...student.assignments, newAssignment],
-  }));
-
-  return clonedGradeBook;
-};
+const updatedCourses = addAssignment({
+  courseId: "CS277",
+  assignmentName: "Homework 1",
+  maxPoints: 50,
+});
+console.info("Original courses:", JSON.stringify(COURSES, null, 2));
+console.info("Updated courses:", JSON.stringify(updatedCourses, null, 2));
