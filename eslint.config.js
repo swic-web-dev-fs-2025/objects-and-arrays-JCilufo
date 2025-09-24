@@ -41,35 +41,7 @@ export default [
       "max-depth": ["error", STUDENT_LIMITS.MAX_DEPTH],
       "no-nested-ternary": "error",
 
-      // Clear naming
-      "id-length": [
-        "error",
-        {
-          min: STUDENT_LIMITS.MIN_NAME_LENGTH,
-          exceptions: [
-            "i",
-            "j",
-            "k", // Loop counters
-            "x",
-            "y",
-            "z", // Coordinates
-            "e", // Event handlers
-            "n", // Common for numbers in math
-            "_", // Lodash or unused params
-            "t", // Common for time/translate functions
-          ],
-        },
-      ],
       camelcase: "error",
-
-      // No magic 🪄 numbers
-      "no-magic-numbers": [
-        "error",
-        {
-          ignore: [0, 1],
-          ignoreArrayIndexes: true,
-        },
-      ],
 
       // Modern JavaScript
       "no-var": "error",
@@ -78,6 +50,7 @@ export default [
       "prefer-template": "error",
       eqeqeq: ["error", "always"],
       "dot-notation": "error",
+      "object-shorthand": "error",
 
       // Single Responsibility
       "max-classes-per-file": ["error", 1],
