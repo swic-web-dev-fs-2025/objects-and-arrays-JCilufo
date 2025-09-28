@@ -1,4 +1,4 @@
-const COURSES = [
+export default [
   {
     id: "CS277",
     name: "Web Development",
@@ -22,5 +22,3 @@ const COURSES = [
     ],
   },
 ];
-
-export default COURSES;
