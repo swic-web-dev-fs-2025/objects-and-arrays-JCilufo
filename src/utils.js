@@ -1,37 +1,33 @@
 export const addAssignmentToCourse = ({
-  courses,
-  courseId,
+  course,
   assignmentName,
   maxPoints,
 }) => {
-  const clonedCourses = structuredClone(courses);
-  const foundCourse = clonedCourses.find(({ id }) => id === courseId);
+  const clonedCourse = structuredClone(course);
 
   const newAssignment = { name: assignmentName, points: null, maxPoints };
 
-  foundCourse.students = foundCourse.students.map((student) => ({
+  clonedCourse.students = clonedCourse.students.map((student) => ({
     ...student,
     assignments: [...student.assignments, newAssignment],
   }));
 
-  return clonedCourses;
+  return clonedCourse;
 };
 
-export const getClassAverage = (courses, courseId) => {
-  const foundCourse = courses.find(({ id }) => id === courseId);
-  const totalStudents = foundCourse.students.length;
+export const getClassAverage = (course) => {
+  const totalStudents = course.students.length;
 
   return Math.round(
-    foundCourse.students
-      .map(({ id }) => getStudentPercentage(courses, courseId, id))
+    course.students
+      .map(({ id }) => getStudentPercentage(course, id))
       ?.reduce((acc, percentage) => acc + percentage, 0) / totalStudents
   );
 };
 
-export const getStudentPercentage = ({ courses, courseId, studentId }) => {
-  const { totalPoints, totalMaxPoints } = courses
-    .find(({ id }) => id === courseId)
-    .students.find(({ id }) => id === studentId)
+export const getStudentPercentage = (course, studentId) => {
+  const { totalPoints, totalMaxPoints } = course.students
+    .find(({ id }) => id === studentId)
     ?.assignments.reduce(
       (totalPointsAccumulator, { points, maxPoints }) => ({
         totalPoints: totalPointsAccumulator.totalPoints + points,
