@@ -1,23 +1,32 @@
-import COURSES from "./data.js";
+import DATA from "./data.js";
 import {
-  getStudentPercentage,
+  addAssignmentToCourse,
   getClassAverage,
-  addAssignment,
+  getStudentPercentage,
 } from "./utils.js";
 
-const mariaPercentage = getStudentPercentage("CS277", 1);
-console.info("Maria's percentage:", mariaPercentage, "%");
+const CIS277 = DATA[0];
 
-const johnPercentage = getStudentPercentage("CS277", 2);
-console.info("John's percentage:", johnPercentage, "%");
+const maria = CIS277.students.find(({ name }) => name === "Maria");
+const john = CIS277.students.find(({ name }) => name === "John");
 
-const classAverage = getClassAverage("CS277");
-console.info("Class average:", classAverage, "%");
+console.info(`Maria's percentage: ${getStudentPercentage(CIS277, maria.id)}%`);
 
-const updatedCourses = addAssignment({
-  courseId: "CS277",
+console.info(`John's percentage: ${getStudentPercentage(CIS277, john.id)}%`);
+
+console.info(`Class average: ${getClassAverage(CIS277)}"%`);
+
+const newAssignment = addAssignmentToCourse({
+  course: CIS277,
   assignmentName: "Homework 1",
   maxPoints: 50,
 });
-console.info("Original courses:", JSON.stringify(COURSES, null, 2));
-console.info("Updated courses:", JSON.stringify(updatedCourses, null, 2));
+
+console.info("Original assignments for Maria:", maria.assignments);
+console.info("Original assignments for John:", john.assignments);
+
+const newMaria = newAssignment.students.find(({ name }) => name === "Maria");
+const newJohn = newAssignment.students.find(({ name }) => name === "John");
+
+console.info("Updated assignments for Maria:", newMaria.assignments);
+console.info("Updated assignments for John:", newJohn.assignments);
