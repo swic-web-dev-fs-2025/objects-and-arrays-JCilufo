@@ -1,6 +1,6 @@
 export default [
   {
-    id: "CS277",
+    id: "CIS277",
     name: "Web Development",
     students: [
       {
