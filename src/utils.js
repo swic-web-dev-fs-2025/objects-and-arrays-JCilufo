@@ -47,9 +47,45 @@ export const calculateDiscount = (price, discountPercent) => {
 export const formatGrade = (percentage) => {
   const grades = ["F", "F", "F", "F", "F", "F", "D", "C", "B", "A"];
   const index = Math.min(Math.floor(percentage / 10), 9);
-  return grades[index];
+  return `${percentage}%: ${grades[index]}`;
 };
 
 export const isValidScore = (points, maxPoints) => {
   return points >= 0 && points <= maxPoints;
+};
+
+export const generateStudentId = (firstName, lastName) => {
+  const firstInitial = firstName.charAt(0).toLowerCase();
+  const lastNameLower = lastName.toLowerCase();
+  const randomNum = Math.floor(100 + Math.random() * 900);
+  return `${firstInitial}${lastNameLower}${randomNum}`;
+};
+
+export const calculateLetterGrade = (percentage) => {
+  const grades = ["F", "F", "F", "F", "F", "F", "D", "C", "B", "A"];
+  const index = Math.min(Math.floor(percentage / 10), 9);
+  return grades[index];
+};
+
+export const findTopStudent = (course) => {
+  const studentPercentages = course.students.map((student) => {
+    const totalPoints = student.assignments.reduce(
+      (sum, acc) => sum + acc.pointsEarned,
+      0
+    );
+    const totalMaxPoints = student.assignments.reduce(
+      (sum, acc) => sum + acc.maxPoints,
+      0
+    );
+    const percentage =
+      totalMaxPoints > 0 ? (totalPoints / totalMaxPoints) * 100 : 0;
+    return { name: student.name, percentage };
+  });
+
+  const topStudent = studentPercentages.reduce(
+    (top, current) => (current.percentage > top.percentage ? current : top),
+    studentPercentages[0]
+  );
+
+  return topStudent;
 };
