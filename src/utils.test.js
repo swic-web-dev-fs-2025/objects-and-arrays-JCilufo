@@ -3,6 +3,9 @@ import {
   addAssignmentToCourse,
   getClassAverage,
   getStudentPercentage,
+  calculateDiscount,
+  formatGrade,
+  isValidScore,
 } from "./utils.js";
 import DATA from "./data.js";
 
@@ -61,5 +64,33 @@ describe("addAssignmentToCourse function", () => {
       points: null,
       maxPoints: 50,
     });
+  });
+});
+
+describe("calculateDiscount function", () => {
+  it("should calculate the correct discount", () => {
+    const price = 100;
+    const discountPercent = 0.2;
+    const result = calculateDiscount(price, discountPercent);
+    expect(result).toBe(80);
+  });
+});
+
+describe("formatGrade function", () => {
+  it("should return the correct letter grade", () => {
+    expect(formatGrade(90)).toBe("A");
+    expect(formatGrade(80)).toBe("B");
+    expect(formatGrade(70)).toBe("C");
+    expect(formatGrade(60)).toBe("D");
+    expect(formatGrade(50)).toBe("F");
+  });
+});
+
+describe("isValidScore function", () => {
+  it("should validate the score correctly", () => {
+    expect(isValidScore(0, 100)).toBe(true);
+    expect(isValidScore(100, 100)).toBe(true);
+    expect(isValidScore(-1, 100)).toBe(false);
+    expect(isValidScore(101, 100)).toBe(false);
   });
 });
