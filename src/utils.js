@@ -38,3 +38,18 @@ export const getStudentPercentage = (course, studentId) => {
 
   return Math.round((totalPoints / totalMaxPoints) * 100);
 };
+
+export const calculateDiscount = (price, discountPercent) => {
+  const discountedPrice = price - price * discountPercent;
+  return discountedPrice;
+};
+
+export const formatGrade = (percentage) => {
+  const grades = ["F", "F", "F", "F", "F", "F", "D", "C", "B", "A"];
+  const index = Math.min(Math.floor(percentage / 10), 9);
+  return grades[index];
+};
+
+export const isValidScore = (points, maxPoints) => {
+  return points >= 0 && points <= maxPoints;
+};
