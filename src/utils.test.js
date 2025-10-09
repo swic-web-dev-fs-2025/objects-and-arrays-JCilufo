@@ -85,7 +85,6 @@ describe("addAssignmentToCourse function", () => {
       maxPoints: 50,
     });
 
-    // Check immutability
     expect(data.students[0].assignments.length).toBe(originalAssignmentCount);
     expect(newAssignment.students[0].assignments.length).toBe(
       originalAssignmentCount + 1
@@ -93,7 +92,6 @@ describe("addAssignmentToCourse function", () => {
   });
 });
 
-// Tests for broken functions
 describe("calculateDiscount function", () => {
   it("should calculate the correct discount", () => {
     const price = 100;
@@ -122,7 +120,6 @@ describe("isValidScore function", () => {
   });
 });
 
-// Pre written tests
 describe("generateStudentId function", () => {
   it("should generate student ID correctly", () => {
     const id = generateStudentId("John", "Smith");
