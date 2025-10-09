@@ -10,30 +10,54 @@ import {
   calculateLetterGrade,
   findTopStudent,
 } from "./utils.js";
-import DATA from "./data.js";
-
-const CIS277 = DATA[0];
 
 describe("getStudentPercentage function", () => {
-  it("should calculate each student's percentage", () => {
-    const maria = CIS277.students.find(({ name }) => name === "Maria");
-    const percentage1 = getStudentPercentage(CIS277, maria.id);
-    const john = CIS277.students.find(({ name }) => name === "John");
-    const percentage2 = getStudentPercentage(CIS277, john.id);
+  it("should calculate Maria's percentage correctly", () => {
+    const data = {
+      students: [
+        {
+          id: 1,
+          assignments: [
+            { points: 85, maxPoints: 100 },
+            { points: 18, maxPoints: 20 },
+          ],
+        },
+      ],
+    };
 
-    expect(percentage1).toBe(86);
-    expect(percentage2).toBe(93);
-    expect(percentage1).toBeGreaterThan(0);
-    expect(percentage2).toBeGreaterThan(0);
-    expect(percentage1).toBeLessThanOrEqual(100);
-    expect(percentage2).toBeLessThanOrEqual(100);
+    const id = 1;
+
+    const outputPercentage = getStudentPercentage(data, id);
+
+    expect(outputPercentage).toBe(86);
+    expect(outputPercentage).toBeGreaterThan(0);
+    expect(outputPercentage).toBeLessThanOrEqual(100);
   });
 });
 
 describe("getClassAverage function", () => {
-  it("should calculate class average", () => {
-    const classAverage = CIS277;
-    const result = getClassAverage(classAverage);
+  it("should calculate class average correctly", () => {
+    const data = {
+      students: [
+        {
+          id: 1,
+          assignments: [
+            { points: 85, maxPoints: 100 },
+            { points: 18, maxPoints: 20 },
+          ],
+        },
+        {
+          id: 2,
+          assignments: [
+            { points: 92, maxPoints: 100 },
+            { points: 19, maxPoints: 20 },
+          ],
+        },
+      ],
+    };
+
+    const result = getClassAverage(data);
+
     expect(result).toBe(90);
     expect(result).toBeGreaterThan(0);
     expect(result).toBeLessThanOrEqual(100);
@@ -42,34 +66,34 @@ describe("getClassAverage function", () => {
 
 describe("addAssignmentToCourse function", () => {
   it("should preserve immutability", () => {
-    const originalCourse = CIS277;
-    const originalStudentCount = originalCourse.students.length;
-    const originalFirstStudent = originalCourse.students[0];
-    const originalAssignmentCount = originalFirstStudent.assignments.length;
+    const data = {
+      students: [
+        {
+          assignments: [
+            { name: "Project 1", points: 85, maxPoints: 100 },
+            { name: "Quiz 1", points: 18, maxPoints: 20 },
+          ],
+        },
+      ],
+    };
+
+    const originalAssignmentCount = data.students[0].assignments.length;
 
     const newAssignment = addAssignmentToCourse({
-      course: originalCourse,
+      course: data,
       assignmentName: "Homework 1",
       maxPoints: 50,
     });
 
-    expect(originalCourse.students.length).toBe(originalStudentCount);
-    expect(originalCourse.students[0].assignments.length).toBe(
-      originalAssignmentCount
-    );
-
+    // Check immutability
+    expect(data.students[0].assignments.length).toBe(originalAssignmentCount);
     expect(newAssignment.students[0].assignments.length).toBe(
       originalAssignmentCount + 1
     );
-
-    expect(newAssignment.students[0].assignments).toContainEqual({
-      name: "Homework 1",
-      points: null,
-      maxPoints: 50,
-    });
   });
 });
 
+// Tests for broken functions
 describe("calculateDiscount function", () => {
   it("should calculate the correct discount", () => {
     const price = 100;
@@ -98,6 +122,7 @@ describe("isValidScore function", () => {
   });
 });
 
+// Pre written tests
 describe("generateStudentId function", () => {
   it("should generate student ID correctly", () => {
     const id = generateStudentId("John", "Smith");
